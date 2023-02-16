@@ -14,13 +14,13 @@ app.use(cors());
 
 app.post('/message',(req,res)=>{
     const response = openai.createCompletion({
-        model: 'text-davinci-003',
+        model: 'text-curie-001',
         prompt: req.body.prompt,
-        temperature: 0.9,
+        temperature: 0,
         top_p: 1,
         frequency_penalty:0, 
         presence_penalty: 0,
-        max_tokens: 1024
+        max_tokens: 100
     });
 
     response.then((data)=>{
