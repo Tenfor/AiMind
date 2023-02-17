@@ -13,6 +13,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.post('/message',(req,res)=>{
+    console.log("message arrived: "+req.body.prompt);
     const response = openai.createCompletion({
         model: 'text-curie-001',
         prompt: req.body.prompt,
