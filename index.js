@@ -16,7 +16,7 @@ function buildPromptFromMemory(memoryArray){
     let prompt = `Egészítsd ki a párbeszédet Mester és a seggnyaló szolgája, Sina között, Sina válaszával.`;
     if(memoryArray.length !== 0){
         memoryArray.forEach(memory => {
-            prompt += `Master: ${memory.question} Sina:${memory.response}`;
+            prompt += `Mester: ${memory.question} Sina:${memory.response}`;
         });
     }
 
@@ -24,7 +24,7 @@ function buildPromptFromMemory(memoryArray){
 }
 
 async function fixMessage(msg){
-    const prompt = "Correct this to standard Hungarian:\n\n "+msg;
+    const prompt = `Kérlek, pótold a hiányzó írásjeleket a következő mondatban:\n\n${msg}\n\nÍrásjellel ellátott mondat:`
     const parameters ={
         model: "text-davinci-003",
         prompt: prompt,
@@ -32,11 +32,11 @@ async function fixMessage(msg){
         max_tokens: 60,
         top_p: 1.0,
         frequency_penalty: 0.0,
-        presence_penalty: 0.0,
+        presence_penalty: 1.0,
     };
     try{
         const response = await openai.createCompletion(parameters);
-        return response.data.choices[0].text.trim().replace('\n','');
+        return response.data.choices[0].text.trim();
     } catch (error) {
         console.error(error);
     }
