@@ -30,20 +30,22 @@ app.use(cors());
 app.post('/message',(req,res)=>{
     try {
         const msg = req.body.msg;
-        // const prompt = `Beszélgetés a bot-tal: "${msg}".\nBot válasza:`;
+        const prompt = `Egészítsd ki a párbeszédet Mester és a szolgálója, Sina között. Mester: ${msg} Sina:`;
         console.log("message arrived: "+msg);
         const response = openai.createCompletion({
             model: 'text-davinci-003',
-            prompt: msg,
+            prompt: prompt,
             n: 1,
-            temperature:0.6,
+            temperature:1,
             // stop:'\n', 
             max_tokens: 150,
 
         });
     
         response.then((data)=>{
-            res.send({message:data.data.choices[0].text.trim()});
+            const reply = data.data.choices[0].text.trim().replace('\n','');
+            console.log(`robot reply: ${reply}`);
+            res.send({message:reply});
         });
     } catch (error) {
         console.error(error);        
