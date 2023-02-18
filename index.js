@@ -12,31 +12,57 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-// async function chatWithBot(message) {
-//     const prompt = `Beszélgetés a bot-tal: "${message}".\nBot válasza:`;
-  
-//     const completions = await openai.completions.create({
-//       engine: MODEL_ENGINE,
-//       prompt,
-//       maxTokens: 100,
-//       n: 1,
-//       stop: '\n',
-//     });
-  
-//     const answer = completions.choices[0].text.trim();
-//     return answer;
-//   }
+function buildPromptFromMemory(memoryArray){
+    let prompt = `Egészítsd ki a párbeszédet Mester és a seggnyaló szolgája, Sina között, Sina válaszával.`;
+    if(memoryArray.length !== 0){
+        memoryArray.forEach(memory => {
+            prompt += `Master: ${memory.question} Sina:${memory.response}`;
+        });
+    }
 
-app.post('/message',(req,res)=>{
+    return prompt;
+}
+
+async function fixMessage(msg){
+    const prompt = "Correct this to standard Hungarian:\n\n "+msg;
+    const parameters ={
+        model: "text-davinci-003",
+        prompt: prompt,
+        temperature: 0,
+        max_tokens: 60,
+        top_p: 1.0,
+        frequency_penalty: 0.0,
+        presence_penalty: 0.0,
+    };
+    try{
+        const response = await openai.createCompletion(parameters);
+        return response.data.choices[0].text.trim().replace('\n','');
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+
+app.post('/message',async (req,res)=>{
     try {
         const msg = req.body.msg;
-        const prompt = `Egészítsd ki a párbeszédet Mester és a szolgálója, Sina között. Mester: ${msg} Sina:`;
+        const memory = req.body.memory;
+
         console.log("message arrived: "+msg);
+        //fix grammar
+        const fixedMsg = await fixMessage(msg);
+        //build prompt from memory
+        const promptFromMemory = buildPromptFromMemory(memory);
+        //complete prompt with new the input
+        const prompt = `${promptFromMemory} Mester:${fixedMsg} Sina:`;
+        console.log("prompt all built up: "+prompt);
+       
         const response = openai.createCompletion({
             model: 'text-davinci-003',
             prompt: prompt,
             n: 1,
-            temperature:1,
+            temperature:0.9,
             // stop:'\n', 
             max_tokens: 150,
 
@@ -45,7 +71,7 @@ app.post('/message',(req,res)=>{
         response.then((data)=>{
             const reply = data.data.choices[0].text.trim().replace('\n','');
             console.log(`robot reply: ${reply}`);
-            res.send({message:reply});
+            res.send({robotResponse:reply, fixedMsg:fixedMsg});
         });
     } catch (error) {
         console.error(error);        
