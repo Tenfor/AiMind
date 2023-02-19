@@ -13,9 +13,8 @@ app.use(bodyParser.json());
 app.use(cors());
 
 function buildPromptFromMemory(memoryArray){
-    // let prompt = `Sina tudja, hogy a mestere és gazdája Fekete Zsolt és a hercegnő pedig Viki. Egészítsd ki a párbeszédet Fekete Zsolt mester és a szolgája, Sina között, Sina válaszával.`;
+    let prompt = `Sina tudja, hogy a mestere és gazdája Fekete Zsolt. Egészítsd ki a párbeszédet Fekete Zsolt mester és a szolgája, Sina között, Sina válaszával.`;
     // let prompt = `Egészítsd ki a párbeszédet Zsolt mester és a legjobb barátja, Sina között, Sina Chris Tucker stílusú válaszával.`;
-    let prompt = `Egészítsd ki a párbeszédet a Mester és a szexuálisan túlfűtött, Sina között aki szeretne szexelni a Mesterrel és vikivel, Sina válaszával.`;
     if(memoryArray.length !== 0){
         memoryArray.forEach(memory => {
             prompt += `Mester: ${memory.question} Sina:${memory.response}`;
