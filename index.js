@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 function buildPromptFromMemory(memoryArray){
-    let prompt = `Egészítsd ki a párbeszédet Mester és a seggnyaló szolgája, Sina között, Sina válaszával.`;
+    let prompt = `Egészítsd ki a párbeszédet Fekete Zsolt mester és a szolgája, Sina között, Sina válaszával.`;
     if(memoryArray.length !== 0){
         memoryArray.forEach(memory => {
             prompt += `Mester: ${memory.question} Sina:${memory.response}`;
