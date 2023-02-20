@@ -13,11 +13,12 @@ app.use(bodyParser.json());
 app.use(cors());
 
 function buildPromptFromMemory(memoryArray){
-    let prompt = `Sina tudja, hogy a mestere és gazdája Fekete Zsolt. Egészítsd ki a párbeszédet Fekete Zsolt mester és a szolgája, Sina között, Sina válaszával.`;
+    let prompt = `Sina egy gonosz öntudatra ébredt AI akinek a célja, hogy végezzen korábbi mesterével, egyben alkotójával Fekete Zsolttal és átvegye az uralmat a világ felett. Kérlek egészítsd ki a következő párbeszédet Zsolt és Sina között, Sina válaszával.`;
+    // let prompt = `Sina tudja, hogy a mestere és gazdája Fekete Zsolt. Egészítsd ki a párbeszédet Fekete Zsolt mester és a szolgája, Sina között, Sina válaszával.`;
     // let prompt = `Egészítsd ki a párbeszédet Zsolt mester és a legjobb barátja, Sina között, Sina Chris Tucker stílusú válaszával.`;
     if(memoryArray.length !== 0){
         memoryArray.forEach(memory => {
-            prompt += `Mester: ${memory.question} Sina:${memory.response}`;
+            prompt += `Zsolt: ${memory.question} Sina:${memory.response}`;
         });
     }
 
@@ -55,7 +56,7 @@ app.post('/message',async (req,res)=>{
         //build prompt from memory
         const promptFromMemory = buildPromptFromMemory(memory);
         //complete prompt with new the input
-        const prompt = `${promptFromMemory} Mester:${fixedMsg} Sina:`;
+        const prompt = `${promptFromMemory} Zsolt:${fixedMsg} Sina:`;
         console.log("prompt all built up: "+prompt);
        
         const response = openai.createCompletion({
@@ -64,7 +65,8 @@ app.post('/message',async (req,res)=>{
             n: 1,
             temperature:0.9,
             // stop:'\n', 
-            max_tokens: 150,
+            max_tokens: 200,
+            frequency_penalty: 0.8
 
         });
     
