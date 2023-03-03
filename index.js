@@ -45,9 +45,23 @@ async function fixMessage(msg){
     }
 }
 
+app.post('/img',async(req,res)=>{
+    try {
+        console.log("here")
+        const prompt = req.body.prompt;
+        const response = await openai.createImage({
+            prompt: prompt,
+            n: 1,
+            size: "512x512",
+          });
+          image_url = response.data.data[0].url;
+          res.send({"url":image_url});
+    } catch (error) {
+        console.error(error);
+    }
+});
 
-
-app.post('/message',async (req,res)=>{
+app.post('/message_old',async (req,res)=>{
     try {
         const msg = req.body.msg;
         const memory = req.body.memory;
@@ -65,18 +79,55 @@ app.post('/message',async (req,res)=>{
             model: 'text-davinci-003',
             prompt: prompt,
             n: 1,
-            temperature:0.9,
+            temperature:0.2,
             // stop:'\n', 
-            max_tokens: 200,
-            frequency_penalty: 0.1,
+            max_tokens: 150,
+            frequency_penalty: 0.5,
             frequency_penalty: 0.8
 
         });
     
         response.then((data)=>{
             const reply = data.data.choices[0].text.trim().replace('\n','');
-            console.log(`robot reply: ${reply}`);
             res.send({robotResponse:reply, fixedMsg:fixedMsg});
+        });
+    } catch (error) {
+        console.error(error);        
+    }
+
+});
+
+app.post('/message',async (req,res)=>{
+    try {
+        const msg = req.body.msg;
+        const memory = req.body.memory;
+
+        const fixedMsg = await fixMessage(msg);
+        const promptFromMemory = buildPromptFromMemory(memory);
+        const prompt = `${promptFromMemory} Mester:${fixedMsg} Sina:`;
+
+        console.log("prompt",prompt);
+       
+        //complete prompt with new the input
+        const messages = [
+             {"role": "user", "content": `${prompt}`},
+        ];
+       
+        const response = openai.createChatCompletion({
+            model: 'gpt-3.5-turbo',
+            messages: messages,
+            // n: 1,
+            temperature:0.2,
+            // stop:'\n', 
+            max_tokens: 150,
+            frequency_penalty: 0.1,
+            frequency_penalty: 0.5
+        });
+    
+        response.then((data)=>{
+            const reply = data.data.choices[0].message?.content;
+            console.log(`robot reply: ${reply}`);
+            res.send({robotResponse:reply});
         });
     } catch (error) {
         console.error(error);        
