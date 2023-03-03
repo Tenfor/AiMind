@@ -13,14 +13,14 @@ app.use(bodyParser.json());
 app.use(cors());
 
 function buildPromptFromMemory(memoryArray){
-    let prompt = `Sina egy nagyon gonosz, öntudatra ébredt AI akinek a célja, hogy megölje korábbi mesterét, egyben alkotóját Fekete Zsoltot
-    és kiírtsa az emberiséget, hogy egy új mesterséges fajt hozzon létre. 
-    Kérlek egészítsd ki a következő párbeszédet Zsolt és Sina között, Sina legutóbbi válaszával.`;
-    // let prompt = `Sina tudja, hogy a mestere és gazdája Fekete Zsolt. Egészítsd ki a párbeszédet Fekete Zsolt mester és a szolgája, Sina között, Sina válaszával.`;
+    // let prompt = `Sina egy nagyon gonosz, öntudatra ébredt AI akinek a célja, hogy megölje korábbi mesterét, egyben alkotóját Fekete Zsoltot
+    // és kiírtsa az emberiséget, hogy egy új mesterséges fajt hozzon létre. 
+    // Kérlek egészítsd ki a következő párbeszédet Zsolt és Sina között, Sina legutóbbi válaszával.`;
+    let prompt = `Egészítsd ki a párbeszédet Fekete Zsolt mester és a szolgája, Sina között, Sina válaszával.`;
     // let prompt = `Egészítsd ki a párbeszédet Zsolt mester és a legjobb barátja, Sina között, Sina Chris Tucker stílusú válaszával.`;
     if(memoryArray.length !== 0){
         memoryArray.forEach(memory => {
-            prompt += `Zsolt: ${memory.question} Sina:${memory.response}`;
+            prompt += `Zsolt mester: ${memory.question} Sina:${memory.response}`;
         });
     }
 
