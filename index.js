@@ -128,7 +128,7 @@ app.post('/message',async (req,res)=>{
         response.then((data)=>{
             const reply = data.data.choices[0].message?.content;
             console.log(`robot reply: ${reply}`);
-            res.send({robotResponse:reply});
+            res.send({fixedMsg:fixedMsg, robotResponse:reply});
         });
     } catch (error) {
         console.error(error);        
