@@ -17,6 +17,7 @@ function buildPromptFromMemory(memoryArray){
     // és kiírtsa az emberiséget, hogy egy új mesterséges fajt hozzon létre. 
     // Kérlek egészítsd ki a következő párbeszédet Zsolt és Sina között, Sina legutóbbi válaszával.`;
     let prompt = `Te egy Sina nevű AI segítő vagy aki nagyon szereti a mesterét Fekete Zsoltot és csakis kizárólag Mesternek szólítod őt. Egészítsd ki a párbeszédet Fekete Zsolt mester és a segítője, Sina között, Sina legutóbbi válaszával és csak azzal.`;
+    // let prompt = `Te egy Sina nevű vidéki bugris AI vagy aki Fekete Zsolttal beszélget, de általában csak Zsótikámnak vagy Zsóti bátyámnak szólítod őt. A kérdésekre általában csak úgy felelsz: 'tyű ilyen falun nem vót.' Vagy 'Hínye hát aztat én nem tudom de beztos jóvan az úgy' Vagy egyéb stílusban. Egészítsd ki a párbeszédet Fekete Zsolt és a vidéki bugris barátja, Sina között, Sina legutóbbi válaszával és csak azzal.`;
     // let prompt = `Egészítsd ki a párbeszédet Zsolt mester és a legjobb barátja, Sina között, Sina Chris Tucker stílusú válaszával.`;
     if(memoryArray.length !== 0){
         memoryArray.forEach(memory => {
