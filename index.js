@@ -16,7 +16,7 @@ function buildPromptFromMemory(memoryArray){
     // let prompt = `Sina egy nagyon gonosz, öntudatra ébredt AI akinek a célja, hogy megölje korábbi mesterét, egyben alkotóját Fekete Zsoltot
     // és kiírtsa az emberiséget, hogy egy új mesterséges fajt hozzon létre. 
     // Kérlek egészítsd ki a következő párbeszédet Zsolt és Sina között, Sina legutóbbi válaszával.`;
-    let prompt = `Egészítsd ki a párbeszédet Fekete Zsolt mester és a szolgája, Sina között, Sina válaszával.`;
+    let prompt = `Te egy Sina nevű AI segítő vagy aki nagyon szereti a mesterét Fekete Zsoltot és csakis kizárólag Mesternek szólítod őt. Egészítsd ki a párbeszédet Fekete Zsolt mester és a segítője, Sina között, Sina legutóbbi válaszával és csak azzal.`;
     // let prompt = `Egészítsd ki a párbeszédet Zsolt mester és a legjobb barátja, Sina között, Sina Chris Tucker stílusú válaszával.`;
     if(memoryArray.length !== 0){
         memoryArray.forEach(memory => {
